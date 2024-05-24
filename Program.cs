@@ -25,7 +25,7 @@ while (true)
             Console.Write(startMessage);
             var selectedOption = Console.ReadLine();
 
-            if (int.TryParse(selectedOption, out selectedOptionInt) && selectedOptionInt > 0 && selectedOptionInt < 6)
+            if (int.TryParse(selectedOption, out selectedOptionInt) & selectedOptionInt >= 0 & selectedOptionInt < 6)
             {
                 validInput = true;
             }
@@ -39,6 +39,11 @@ while (true)
             Console.WriteLine("Error occured " + e.Message);
         }
     }
+    
+    if (selectedOptionInt == 0)
+    {
+        break;
+    }
 
     switch (selectedOptionInt)
     {
@@ -48,6 +53,7 @@ while (true)
             break;
         case 2:
             ViewBooks();
+            validInput = false;
             break;
         case 3:
             // code for viewing books by name
@@ -62,11 +68,6 @@ while (true)
             Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
             break;
     }
-
-    if (selectedOptionInt == 0)
-    {
-        break;
-    }
 }
 
 void AddBook()
@@ -75,9 +76,7 @@ void AddBook()
         try
         {
             Console.Write("Enter book id : ");
-            string? bookIdInput = Console.ReadLine();
-            int bookIdInt;
-            int.TryParse(bookIdInput, out bookIdInt);
+            string? bookId = Console.ReadLine();
             Console.Write("Enter book title : ");
             string? title = Console.ReadLine();
             Console.Write("Enter book author : ");
@@ -85,13 +84,14 @@ void AddBook()
             Console.Write("Enter book category : ");
             string? category = Console.ReadLine();
             
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(author) || string.IsNullOrEmpty(category))
+            if (string.IsNullOrEmpty(bookId) || string.IsNullOrEmpty(title) || string.IsNullOrEmpty(author) || string.IsNullOrEmpty(category))
             {
                 Console.WriteLine("Please enter valid values for title, author and category.");
                 continue;
             }
-
-            Book book = new Book(bookIdInt, title, author, category);
+            
+            Book book = new Book(bookId, title, author, category);
+            // Book book = new Book("b001", "Book Title", "Author Name", "Category");
             bookList.Add(book);
             break;
         }
@@ -107,6 +107,13 @@ void ViewBooks()
 {
     foreach (var book in bookList)
     {
-        Console.WriteLine($"Book Id : {book.BookId}\n, Title : {book.Title}\n, Author : {book.Author}\n, Category : {book.Category}\n");
+        Console.WriteLine($"" +
+                          $"Book Id : {book.BookId}\n" +
+                          $"Title : {book.Title}\n" +
+                          $"Author : {book.Author}\n" +
+                          $"Category : {book.Category}\n"
+                          );
     }
+    // Console.WriteLine(bookList[0].ToString());
+
 }
