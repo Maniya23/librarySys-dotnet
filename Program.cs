@@ -1,11 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Text.Json;
 using LibruaryManagementSys;
 
 Console.WriteLine("Welcome to library management system");
 
-List<Book> bookList = new List<Book>();
-List<User> userList = new List<User>();
+List<Book>? bookList = new List<Book>();
+List<User>? userList = new List<User>();
 Book book1 = new Book("b001", "Famous Five", "Enid Blyton", "Novel");
 bookList.Add(book1);
 const string startMessage = @"
@@ -16,10 +17,14 @@ const string startMessage = @"
 5. View books from category
 6. Add a new user to system
 7. Search user by name
+8. Save books to file
 
 Enter the number on which operation to be performed : ";
 bool validInput = false;
 int selectedOptionInt = 0;
+LoadBookList();
+LoadUserList();
+
 
 while (true)
 {
@@ -30,7 +35,7 @@ while (true)
             Console.Write(startMessage);
             var selectedOption = Console.ReadLine();
 
-            if (int.TryParse(selectedOption, out selectedOptionInt) & selectedOptionInt >= 0 & selectedOptionInt < 8)
+            if (int.TryParse(selectedOption, out selectedOptionInt) & selectedOptionInt >= 0 & selectedOptionInt < 10)
             {
                 validInput = true;
             }
@@ -56,30 +61,47 @@ while (true)
             AddBook();
             validInput = false;
             break;
+        
         case 2:
             ViewAllBooks();
             validInput = false;
             break;
+        
         case 3:
             ViewBooksByName();
             validInput = false;
             break;
+        
         case 4:
             ViewBooksByAuthor();
             validInput = false;
             break;
+        
         case 5:
             ViewBooksByCategory();
             validInput = false;
             break;
+        
         case 6:
             AddNewUser();
             validInput = false;
             break;
+        
         case 7:
-            AddNewUser();
+            SearchUserByName();
             validInput = false;
             break;
+        
+        case 8:
+            SaveBooksToFile();
+            validInput = false;
+            break;
+        
+        case 9:
+            SaveUsersToFile();
+            validInput = false;
+            break;
+        
         default:
             Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
             break;
@@ -189,10 +211,8 @@ void ViewBooksByAuthor()
             {
                 break;
             }
-            else
-            {
-                Console.WriteLine("Please enter a valid author name.");
-            }
+
+            Console.WriteLine("Please enter a valid author name.");
         }
         catch (Exception e)
         {
@@ -230,10 +250,8 @@ void ViewBooksByCategory()
             {
                 break;
             }
-            else
-            {
-                Console.WriteLine("Please enter a valid category.");
-            }
+
+            Console.WriteLine("Please enter a valid category.");
         }
         catch (Exception e)
         {
@@ -342,5 +360,93 @@ void SearchUserByName()
     if (!foundUser)
     {
         Console.WriteLine("No user found with the name " + userName);
+    }
+}
+
+void SaveBooksToFile()
+{
+    try
+    {
+        if (bookList.Count != 0)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(bookList, options);
+
+            File.WriteAllText("bookList.json", jsonString);
+            Console.WriteLine("Books successfully saved to file.");
+        }
+        else
+        {
+            Console.WriteLine("No books are created.\nCreate books to save to a file.");
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine("Error occured while saving books to file : " + e.Message);
+    }
+}
+
+void SaveUsersToFile()
+{
+    try
+    {
+        if (userList.Count != 0)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(userList, options);
+
+            File.WriteAllText("userList.json", jsonString);
+            Console.WriteLine("Users successfully saved to file.");
+        }
+        else
+        {
+            Console.WriteLine("No users are created.\nCreate users to save to a file.");
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine("Error occured while saving users to file : " + e.Message);
+        throw;
+    }
+}
+
+void LoadBookList()
+{
+    try
+    {
+        if (File.Exists("bookList.json"))
+        {
+            string jsonString = File.ReadAllText("bookList.json");
+            bookList = JsonSerializer.Deserialize<List<Book>>(jsonString);
+        }
+        else
+        {
+            Console.WriteLine("Books file not found");
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine("Error occured while loading books from file : " + e.Message);
+    }
+}
+
+void LoadUserList()
+{
+    try
+    {
+        if (File.Exists("userList.json"))
+        {
+            string jsonString = File.ReadAllText("userList.json");
+            userList = JsonSerializer.Deserialize<List<User>>(jsonString);
+        }
+        else
+        {
+            Console.WriteLine("User file not found");
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine("Error occured while loading books from file : " + e.Message);
+        throw;
     }
 }
