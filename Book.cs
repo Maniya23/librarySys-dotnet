@@ -3,11 +3,11 @@ namespace LibruaryManagementSys;
 public class Book
 {
     private string _bookId;
-    private string? _title;
+    private string _title;
     private string _author;
     private string _category;
     
-    public Book(string bookId, string? title, string author, string category)
+    public Book(string bookId, string title, string author, string category)
     {
         this._bookId = bookId;
         this._title = title;
@@ -15,13 +15,13 @@ public class Book
         this._category = category;
     }
 
-    public string? BookId
+    public string BookId
     {
         get => _bookId;
         set => _bookId = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public string? Title
+    public string Title
     {
         get => _title;
         set => _title = value ?? throw new ArgumentNullException(nameof(value));

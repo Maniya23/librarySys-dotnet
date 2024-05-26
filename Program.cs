@@ -5,6 +5,7 @@ using LibruaryManagementSys;
 Console.WriteLine("Welcome to library management system");
 
 List<Book> bookList = new List<Book>();
+List<User> userList = new List<User>();
 Book book1 = new Book("b001", "Famous Five", "Enid Blyton", "Novel");
 bookList.Add(book1);
 const string startMessage = @"
@@ -68,6 +69,10 @@ while (true)
             break;
         case 5:
             ViewBooksByCategory();
+            validInput = false;
+            break;
+        case 6:
+            AddNewUser();
             validInput = false;
             break;
         default:
@@ -142,7 +147,6 @@ void ViewBooksByName()
             {
                 Console.WriteLine("Please enter a valid book title.");
             }
-
         }
         catch (Exception e)
         {
@@ -237,4 +241,55 @@ void ViewBooksByCategory()
             Console.WriteLine("No book found with the category "+categoryInput+".");
         }
     }
+}
+
+void AddNewUser()
+{
+    User user;
+    int userId;
+    
+    // Generate user ID
+    if (userList.Count == 0)
+    {
+        userId = 1;
+        Console.WriteLine("User ID : "+userId);
+        
+    }
+    else
+    {
+        userId = userList[-1].UserId + 1;
+    }
+
+    // Get user values
+    while (true)
+    {
+        try
+        {
+            Console.Write("Please enter your name : ");
+            string? name = Console.ReadLine();
+    
+            Console.Write("Please enter your email : ");
+            string? email = Console.ReadLine();
+    
+            Console.Write("Please enter your contact number : ");
+            string? contact = Console.ReadLine();
+            
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(contact))
+            {
+                Console.WriteLine("Please enter valid values for name, email and contact.");
+                continue;
+            }
+
+            user = new User(userId,name, email, contact);
+            userList.Add(user);
+            break;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
+    
 }
