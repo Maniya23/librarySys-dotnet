@@ -38,4 +38,12 @@ public class User
         get => _contact;
         set => _contact = value ?? throw new ArgumentNullException(nameof(value));
     }
+    
+    public override string ToString()
+    {
+        return$"User Id : {UserId}\n" +
+              $"Name : {Name}\n" +
+              $"Email : {Email}\n" +
+              $"Contact : {Contact}\n";
+    }
 }

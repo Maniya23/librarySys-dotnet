@@ -15,6 +15,7 @@ const string startMessage = @"
 4. View all books from author
 5. View books from category
 6. Add a new user to system
+7. Search user by name
 
 Enter the number on which operation to be performed : ";
 bool validInput = false;
@@ -29,7 +30,7 @@ while (true)
             Console.Write(startMessage);
             var selectedOption = Console.ReadLine();
 
-            if (int.TryParse(selectedOption, out selectedOptionInt) & selectedOptionInt >= 0 & selectedOptionInt < 7)
+            if (int.TryParse(selectedOption, out selectedOptionInt) & selectedOptionInt >= 0 & selectedOptionInt < 8)
             {
                 validInput = true;
             }
@@ -75,6 +76,10 @@ while (true)
             AddNewUser();
             validInput = false;
             break;
+        case 7:
+            AddNewUser();
+            validInput = false;
+            break;
         default:
             Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
             break;
@@ -102,7 +107,6 @@ void AddBook()
             }
             
             Book book = new Book(bookId, title, author, category);
-            // Book book = new Book("b001", "Book Title", "Author Name", "Category");
             bookList.Add(book);
             break;
         }
@@ -131,6 +135,7 @@ void ViewAllBooks()
 void ViewBooksByName()
 {
     string? bookNameInput;
+    bool foundBook = false;
     while (true)
     {
         try
@@ -160,18 +165,20 @@ void ViewBooksByName()
         if (string.Equals(book.Title, bookNameInput, StringComparison.CurrentCultureIgnoreCase))
         {
             Console.WriteLine(book.ToString());
+            foundBook = true;
         }
-        else
-        {
-            Console.WriteLine("No book found with the title "+bookNameInput+".");
-        
-        }
+    }
+
+    if (!foundBook)
+    {
+        Console.WriteLine("No book found with the title " + bookNameInput);
     }
 }
 
 void ViewBooksByAuthor()
 {
     string? authorNameInput;
+    bool foundBook = false;
     while(true){
         try
         {
@@ -193,22 +200,26 @@ void ViewBooksByAuthor()
             throw;
         }
     }
+    
     foreach (var book in bookList)
     {
         if (string.Equals(book.Author, authorNameInput, StringComparison.CurrentCultureIgnoreCase))
         {
             Console.WriteLine(book.ToString());
+            foundBook = true;
         }
-        else
-        {
-            Console.WriteLine("No book found with the author "+authorNameInput+".");
-        }
+    }
+    
+    if (!foundBook)
+    {
+        Console.WriteLine("No book found with the category " + authorNameInput);
     }
 }
 
 void ViewBooksByCategory()
 {
     string? categoryInput;
+    bool foundBook = false;
     while(true){
         try
         {
@@ -235,17 +246,17 @@ void ViewBooksByCategory()
         if (string.Equals(book.Category, categoryInput, StringComparison.CurrentCultureIgnoreCase))
         {
             Console.WriteLine(book.ToString());
+            foundBook = true;
         }
-        else
-        {
-            Console.WriteLine("No book found with the category "+categoryInput+".");
-        }
+    }
+    if (!foundBook)
+    {
+        Console.WriteLine("No book found with the category " + categoryInput);
     }
 }
 
 void AddNewUser()
 {
-    User user;
     int userId;
     
     // Generate user ID
@@ -267,20 +278,21 @@ void AddNewUser()
         {
             Console.Write("Please enter your name : ");
             string? name = Console.ReadLine();
-    
+
             Console.Write("Please enter your email : ");
             string? email = Console.ReadLine();
-    
+
             Console.Write("Please enter your contact number : ");
             string? contact = Console.ReadLine();
-            
+
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(contact))
             {
                 Console.WriteLine("Please enter valid values for name, email and contact.");
                 continue;
             }
-
-            user = new User(userId,name, email, contact);
+            
+            // Create new user
+            User user = new User(userId, name, email, contact);
             userList.Add(user);
             break;
         }
@@ -290,6 +302,45 @@ void AddNewUser()
             throw;
         }
     }
-    
-    
+}
+
+void SearchUserByName()
+{
+    bool foundUser = false;
+    string? userName;
+    while (true)
+    {
+        try
+        {
+            Console.WriteLine();
+            Console.WriteLine("Please enter the name of the user : ");
+            userName = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                Console.WriteLine("Please enter a valid name.");
+                continue;
+            }
+            break;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    foreach (var user in userList)
+    {
+        if (string.Equals(user.Name, userName, StringComparison.CurrentCultureIgnoreCase))
+        {
+            Console.WriteLine(user.ToString());
+            foundUser = true;
+        }
+    }
+
+    if (!foundUser)
+    {
+        Console.WriteLine("No user found with the name " + userName);
+    }
 }
