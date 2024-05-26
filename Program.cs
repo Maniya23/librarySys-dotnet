@@ -5,12 +5,15 @@ using LibruaryManagementSys;
 Console.WriteLine("Welcome to library management system");
 
 List<Book> bookList = new List<Book>();
+Book book1 = new Book("b001", "Famous Five", "Enid Blyton", "Novel");
+bookList.Add(book1);
 const string startMessage = @"
 1. Add a new book store
 2. View all books in store
 3. View books in store by book name
 4. View all books from author
-5. Add a new user to system
+5. View books from category
+6. Add a new user to system
 
 Enter the number on which operation to be performed : ";
 bool validInput = false;
@@ -25,7 +28,7 @@ while (true)
             Console.Write(startMessage);
             var selectedOption = Console.ReadLine();
 
-            if (int.TryParse(selectedOption, out selectedOptionInt) & selectedOptionInt >= 0 & selectedOptionInt < 6)
+            if (int.TryParse(selectedOption, out selectedOptionInt) & selectedOptionInt >= 0 & selectedOptionInt < 7)
             {
                 validInput = true;
             }
@@ -52,17 +55,20 @@ while (true)
             validInput = false;
             break;
         case 2:
-            ViewBooks();
+            ViewAllBooks();
             validInput = false;
             break;
         case 3:
-            // code for viewing books by name
+            ViewBooksByName();
+            validInput = false;
             break;
         case 4:
-            // code for viewing books by author
+            ViewBooksByAuthor();
+            validInput = false;
             break;
         case 5:
-            // code for adding new user
+            ViewBooksByCategory();
+            validInput = false;
             break;
         default:
             Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
@@ -103,7 +109,7 @@ void AddBook()
     }
 }
 
-void ViewBooks()
+void ViewAllBooks()
 {
     foreach (var book in bookList)
     {
@@ -115,5 +121,120 @@ void ViewBooks()
                           );
     }
     // Console.WriteLine(bookList[0].ToString());
+}
 
+void ViewBooksByName()
+{
+    string? bookNameInput;
+    while (true)
+    {
+        try
+        {
+            Console.Write("Enter book name : ");
+            bookNameInput = Console.ReadLine();
+
+            if (!string.IsNullOrEmpty(bookNameInput))
+            {
+                break;
+
+            }
+            else
+            {
+                Console.WriteLine("Please enter a valid book title.");
+            }
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    foreach (var book in bookList)
+    {
+        if (string.Equals(book.Title, bookNameInput, StringComparison.CurrentCultureIgnoreCase))
+        {
+            Console.WriteLine(book.ToString());
+        }
+        else
+        {
+            Console.WriteLine("No book found with the title "+bookNameInput+".");
+        
+        }
+    }
+}
+
+void ViewBooksByAuthor()
+{
+    string? authorNameInput;
+    while(true){
+        try
+        {
+            Console.Write("Enter author name : ");
+            authorNameInput = Console.ReadLine();
+
+            if (!string.IsNullOrEmpty(authorNameInput))
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Please enter a valid author name.");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    foreach (var book in bookList)
+    {
+        if (string.Equals(book.Author, authorNameInput, StringComparison.CurrentCultureIgnoreCase))
+        {
+            Console.WriteLine(book.ToString());
+        }
+        else
+        {
+            Console.WriteLine("No book found with the author "+authorNameInput+".");
+        }
+    }
+}
+
+void ViewBooksByCategory()
+{
+    string? categoryInput;
+    while(true){
+        try
+        {
+            Console.Write("Enter category : ");
+            categoryInput = Console.ReadLine();
+
+            if (!string.IsNullOrEmpty(categoryInput))
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Please enter a valid category.");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    foreach (var book in bookList)
+    {
+        if (string.Equals(book.Category, categoryInput, StringComparison.CurrentCultureIgnoreCase))
+        {
+            Console.WriteLine(book.ToString());
+        }
+        else
+        {
+            Console.WriteLine("No book found with the category "+categoryInput+".");
+        }
+    }
 }
